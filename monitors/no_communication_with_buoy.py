@@ -1,6 +1,6 @@
 from datetime import datetime
 
-MAX_HOURS_ALLOWED = 3
+MAX_HOURS_ALLOWED = 6
 
 
 def no_communication_with_buoy(db):
