@@ -8,11 +8,12 @@ def no_communication_with_buoy(db):
         filter = {}
         filter["buoy"] = buoy_name
         for doc in db.samples.find(filter).sort([('d_stamp', -1), ('t_stamp', -1)]).limit(1):
-            doc_datetime = datetime.strptime(doc["d_stamp"] + " " + doc["t_stamp"], '%Y-%m-%d %I:%M:%S')
+            doc_datetime = datetime.strptime(doc["d_stamp"] + " " + doc["t_stamp"], '%Y-%m-%d %H:%M:%S')            
             now = datetime.now()
             delta = now - doc_datetime # timedelta obj
             delta_in_hours = delta.seconds / 3600
-            # print("delta_in_hours " + str(delta_in_hours))
+
+
 
             if delta_in_hours > MAX_HOURS_ALLOWED:
                 print("     delta_in_hours: " + str(delta_in_hours))

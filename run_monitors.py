@@ -1,9 +1,14 @@
 from pymongo import MongoClient
 import smtplib
+from lib.send_sms import *
 from monitors.no_communication_with_buoy import *
 from monitors.battery_is_low import *
+from monitors.buoy_runaway import *
 
-monitors = ["no_communication_with_buoy", "battery_is_low"]
+# monitors = ["no_communication_with_buoy", "battery_is_low"]
+monitors = ["check_when_was_last_ais", "check_runaway"]
+# some monitors will use sms alerts
+require_sms = ["check_runaway"]
 
 
 def send_notification(alert_obj):
@@ -27,19 +32,17 @@ def send_notification(alert_obj):
     ])
 
     try:
-       smtpObj = smtplib.SMTP('mr1.haifa.ac.il', 25)
+       smtpObj = smtplib.SMTP('mr1res.haifa.ac.il', 25)
        smtpObj.sendmail(sender, receiver, message)
        print("-I- Successfully sent email")
     except SMTPException:
        print("-E- Error: unable to send email")
-
 
 def init_db():
     print("-I- Connecting to MOngo DB...")
 
     global client; client = MongoClient()
     global db; db = client.themo
-
 
 if __name__ == "__main__":
     init_db()
@@ -48,3 +51,5 @@ if __name__ == "__main__":
         alert_obj = globals()[monitor](db)
         if alert_obj:
             send_notification(alert_obj)
+            if monitor in require_sms:
+                sendsms(alert_obj["body"])
