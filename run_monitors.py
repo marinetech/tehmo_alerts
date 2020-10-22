@@ -4,7 +4,7 @@ from lib.send_sms import *
 from monitors.no_communication_with_buoy import *
 from monitors.battery_is_low import *
 from monitors.buoy_runaway_shallow import *
-from monitors.buoy_runaway import *
+# from monitors.buoy_runaway import *
 
 
 # monitors = ["no_communication_with_buoy", "battery_is_low"]
