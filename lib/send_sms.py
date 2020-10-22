@@ -11,7 +11,8 @@ def sendsms(txt):
     user = "0529434220"
     _pass = "92921327"
     sender = "Themo"
-    recipient = "0529434220;0547885797,0549259989"
+    recipient = "0529434220;0547885797;0549259989"
+    # recipient = "0547885797"
     msg = txt
 
     #Object that have the data we wanna POST

@@ -3,7 +3,9 @@ import smtplib
 from lib.send_sms import *
 from monitors.no_communication_with_buoy import *
 from monitors.battery_is_low import *
+from monitors.buoy_runaway_shallow import *
 from monitors.buoy_runaway import *
+
 
 # monitors = ["no_communication_with_buoy", "battery_is_low"]
 monitors = ["check_when_was_last_ais", "check_runaway"]
@@ -13,10 +15,9 @@ require_sms = ["check_runaway"]
 
 def send_notification(alert_obj):
 
-    receiver = alert_obj["receiver"]
+    receiver = ", ".join(alert_obj["receiver"])
     body = alert_obj["body"]
     subject = alert_obj["subject"]
-
     sender = 'themo@univ.haifa.ac.il'
 
     message = "\r\n".join([
@@ -50,6 +51,8 @@ if __name__ == "__main__":
         print("\n-I- running '{0}'".format(monitor))
         alert_obj = globals()[monitor](db)
         if alert_obj:
+            print("-I- sending alert mail")
             send_notification(alert_obj)
             if monitor in require_sms:
+                print("-I- sending text message")
                 sendsms(alert_obj["body"])
